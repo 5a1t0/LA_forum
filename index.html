@@ -1,0 +1,62 @@
+<!-- 個人用templateファイル -->
+<?php
+$fp = fopen('php.csv','a+b');
+if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    fputcsv($fp, [$_POST['name'], $_POST['comment']]);
+    rewind($fp);
+}
+while($row = fgetcsv($fp)){
+    $rows[] = $row;
+}
+fclose($fp);
+?>
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <!-- IEの最新で表示する -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- レスポンシブデザイン -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バンドメンバー募集掲示板</title>
+    <!-- リセットCSS -->
+    <link href="css/normalize.css" rel="stylesheet">
+    <link href="css/la_keizibann_style.css" rel="stylesheet">
+    <!-- Webフォントの使用 -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700&display=swap&subset=japanese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Croissant+One&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c336c2db27.js" crossorigin="anonymous"></script>
+</head>
+<body class="post">
+    <h1>バンドメンバー募集<br>掲示板</h1>
+    <section class="toukou">
+        <h2>新規投稿</h2>
+        <form action="#" method="POST">
+            <div class="info">お名前　: <input type="text" name="name"><br></div>
+            <div class="info">コピー元: <input type="text" name="copy"><br></div>
+            <div class="info">パート　: <input type="text" name="inst"><br></div>
+            <div class="comment1">コメント : </div>
+            <div class="comment2"><textarea name="comment" rows="3"></textarea><br></div>
+            <div><button type="submit">投稿する</button></div>
+        </form>
+    </section>
+    <section class="itirann">
+        <h2>投稿一覧</h2>
+
+        <?php if (!empty($rows)): ?>
+    <ul>
+<?php foreach ($rows as $row): ?>
+        <li><?php print $row[1];?> (<?php print $row[0];?>)</li>
+<?php endforeach; ?>
+    </ul>
+<?php else: ?>
+
+        <p>投稿はまだありません</p>
+
+        <?php endif; ?>
+    </section>
+</body>
+</html>
